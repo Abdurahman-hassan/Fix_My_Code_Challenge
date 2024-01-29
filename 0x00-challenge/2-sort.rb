@@ -18,14 +18,16 @@ ARGV.each do |arg|
     is_inserted = false
     i = 0
     l = result.size
-    while !is_inserted && i < l do
-        if result[i] <= i_arg
-            i += 1
-        else
+    while i < l do
+        if result[i] >= i_arg
             result.insert(i, i_arg) # Fix: insert at index i instead of i - 1
             is_inserted = true
+            break
         end
+        i += 1
     end
+
+    # Append at the end if it's not inserted in the middle
     result << i_arg if !is_inserted
 end
 
