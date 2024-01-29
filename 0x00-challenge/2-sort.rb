@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 ###
 #
 #  Sort integer arguments (ascending) 
