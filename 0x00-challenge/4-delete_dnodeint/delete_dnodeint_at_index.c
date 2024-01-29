@@ -1,58 +1,45 @@
 #include "lists.h"
 #include <stdlib.h>
 
-/**
- * delete_dnodeint_at_index - Delete a node at a specific index from a list
- *
- * @head: A pointer to the first element of a list
- * @index: The index of the node to delete
- *
- * Return: 1 on success, -1 on failure
- */
 int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 {
-	dlistint_t *saved_head;
-	dlistint_t *tmp;
+	dlistint_t *current, *temp;
 	unsigned int p;
 
 	if (*head == NULL)
 	{
 		return (-1);
 	}
-	saved_head = *head;
-	p = 0;
-	while (p < index && *head != NULL)
+
+	current = *head;
+	for (p = 0; p < index && current != NULL; p++)
 	{
-		*head = (*head)->next;
-		p++;
+		current = current->next;
 	}
-	if (p != index)
+
+	if (current == NULL)
 	{
-		*head = saved_head;
-		return (-1);
+		return (-1); /* Node at the index not found */
 	}
-	if (0 == index)
+
+	if (index == 0) /* Deleting the head node */
 	{
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
-		if (tmp != NULL)
+		*head = current->next;
+		if (*head != NULL)
 		{
-			tmp->prev = NULL;
+			(*head)->prev = NULL;
 		}
 	}
-	else
+	else /* Deleting a node other than the head */
 	{
-		/* Fix: Correctly updating the next pointer of the previous node */
-		tmp = (*head)->next;
-		(*head)->prev->next = tmp;
-		if (tmp != NULL)
+		temp = current->prev;
+		temp->next = current->next;
+		if (current->next != NULL)
 		{
-			/* Fix: Correctly updating the prev pointer of the next node */
-			tmp->prev = (*head)->prev;
+			current->next->prev = temp;
 		}
-		free(*head);
-		*head = saved_head;
 	}
+
+	free(current);
 	return (1);
 }
