@@ -3,43 +3,44 @@
 
 int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 {
-	dlistint_t *current, *temp;
+	dlistint_t *saved_head;
+	dlistint_t *tmp;
 	unsigned int p;
 
 	if (*head == NULL)
 	{
 		return (-1);
 	}
-
-	current = *head;
-	for (p = 0; p < index && current != NULL; p++)
+	saved_head = *head;
+	p = 0;
+	while (p < index && *head != NULL)
 	{
-		current = current->next;
+		*head = (*head)->next;
+		p++;
 	}
-
-	if (current == NULL)
+	if (p != index)
 	{
-		return (-1); /* Node at the index not found */
+		*head = saved_head;
+		return (-1);
 	}
-
-	if (index == 0) /* Deleting the head node */
+	if (0 == index)
 	{
-		*head = current->next;
-		if (*head != NULL)
+		tmp = (*head)->next;
+		free(*head);
+		*head = tmp;
+		if (tmp != NULL)
 		{
-			(*head)->prev = NULL;
+			tmp->prev = NULL;
 		}
 	}
-	else /* Deleting a node other than the head */
+	else
 	{
-		temp = current->prev;
-		temp->next = current->next;
-		if (current->next != NULL)
-		{
-			current->next->prev = temp;
-		}
+		(*head)->prev->next = (*head)->next;
+		if ((*head)->next)
+			(*head)->next->prev = (*head)->prev;
+		tmp = *head;
+		*head = saved_head;
+		free(tmp);
 	}
-
-	free(current);
 	return (1);
 }
