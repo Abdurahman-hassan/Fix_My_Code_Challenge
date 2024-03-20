@@ -35,7 +35,20 @@ int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 	}
 	else
 	{
+	    /* The previous code is */
+
+		/* (*head)->prev->prev = (*head)->prev;
+		/* free(*head); */
+		/* if ((*head)->next) */
+		/*	(*head)->next->prev = (*head)->prev; */
+		/* *head = saved_head; */
+	}
+
+
 		(*head)->prev->next = (*head)->next;
+		/* The correct way to handle this is to update the next pointer */
+		/* of the previous node and the prev pointer of the next node before */
+		/* deleting the current node. */
 		if ((*head)->next)
 			(*head)->next->prev = (*head)->prev;
 		tmp = *head;
